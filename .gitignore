@@ -7,4 +7,6 @@
 /public/bundles/
 /var/
 /vendor/
+/files/eco/
+/.idea/
 ###< symfony/framework-bundle ###
