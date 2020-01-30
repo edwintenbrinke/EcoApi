@@ -13,7 +13,8 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             # parameters
-            $eco_logger: '@eco_logger'
+            $eco_api_logger: '@eco_api_logger'
+            $eco_process_logger: '@eco_process_logger'
             $eco_data_folder: '%eco_data_folder%'
             $eco_access_token: '%env(ECO_ACCESS_TOKEN)%'
 
@@ -29,15 +30,25 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    # MOBYPAY API LOGGER
-    eco_logger:
+    eco_api_logger:
         class: Symfony\Bridge\Monolog\Logger
         arguments: [eco]
         calls:
-            - [pushHandler, ['@eco_logger_handler']]
+            - [pushHandler, ['@eco_api_logger_handler']]
 
-    eco_logger_handler:
+    eco_api_logger_handler:
         class: Monolog\Handler\RotatingFileHandler
         arguments: ['%kernel.project_dir%/var/log/%kernel.environment%.eco.api.log', 14]
+
+
+    eco_process_logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [eco]
+        calls:
+            - [pushHandler, ['@eco_process_logger_handler']]
+
+    eco_process_logger_handler:
+        class: Monolog\Handler\RotatingFileHandler
+        arguments: ['%kernel.project_dir%/var/log/%kernel.environment%.eco.process.log', 14]
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

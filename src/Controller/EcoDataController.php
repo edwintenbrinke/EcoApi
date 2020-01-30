@@ -29,14 +29,14 @@ class EcoDataController extends AbstractController
     /**
      * @Route("/api/eco/data", name="api_eco_data")
      * @param Request         $request
-     * @param LoggerInterface $eco_logger
+     * @param LoggerInterface $eco_api_logger
      * @param                 $eco_data_folder
      * @param                 $eco_access_token
      *
      * @return JsonResponse
      * @throws \Exception
      */
-    public function getData(Request $request, LoggerInterface $eco_logger, $eco_data_folder, $eco_access_token)
+    public function getData(Request $request, LoggerInterface $eco_api_logger, $eco_data_folder, $eco_access_token)
     {
         // authorize
         $token = $request->headers->get('Authorization');
@@ -50,10 +50,26 @@ class EcoDataController extends AbstractController
             throw new UnauthorizedHttpException('Invalid token', 'You\'re not authorized to access this url');
         }
 
-        $eco_logger->info('Request', [
-            'headers' => $request->headers,
-            'body' => $request->getContent(),
+        $eco_api_logger->info('Request', [
+            'headers' => $request->headers
         ]);
+
+        $content = json_decode($request->getContent(), true);
+        if (!is_array($content)) $content = [];
+
+        foreach ($content as $key => $collection)
+        {
+            $content[$key] = [];
+            foreach ($collection as $entry)
+            {
+                $content[$key][] = array_filter(
+                    $entry,
+                    function($value) {
+                        return !is_null($value) && $value !== '' && $value !== '00000000-0000-0000-0000-000000000000' && $value !== 0.0;
+                    }
+                );
+            }
+        }
 
         $file_name = sprintf('eco-data-%s.json', (new \DateTime())->format('Y-m-d\TH:i:s'));
         $file_path = sprintf('%s%s', $eco_data_folder, $file_name);
@@ -62,7 +78,7 @@ class EcoDataController extends AbstractController
             'w'
         );
 
-        $eco_logger->info('Writing to file.', [
+        $eco_api_logger->info('Writing to file.', [
             'file_name' => $file_name,
             'memory' => [
                 'allocated' => sprintf('%d KB', (memory_get_peak_usage() / 1024)),
@@ -70,10 +86,13 @@ class EcoDataController extends AbstractController
             ],
         ]);
 
-        fwrite($temp_file, $request->getContent());
+        fwrite(
+            $temp_file,
+            json_encode($content)
+        );
         fclose($temp_file);
 
-        $eco_logger->info('File written.', [
+        $eco_api_logger->info('File written.', [
             'file_name' => $file_name,
             'memory' => [
                 'allocated' => sprintf('%d KB', (memory_get_peak_usage() / 1024)),
