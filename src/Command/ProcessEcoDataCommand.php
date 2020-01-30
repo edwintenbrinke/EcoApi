@@ -81,6 +81,7 @@ class ProcessEcoDataCommand extends Command
             }
         );
 
+        $anything_new = false;
         foreach($files as $file_name)
         {
             $this->log(sprintf('processing file: %s', $file_name));
@@ -124,6 +125,13 @@ class ProcessEcoDataCommand extends Command
                     {
                         $this->entity_service->createEntity($entity_class, $class_data);
                     }
+
+                    // TODO check if anything actually updated
+                    if (count($this->em->getUnitOfWork()->getScheduledEntityInsertions()) > 0)
+                    {
+                        $anything_new = true;
+                    }
+
                     $this->em->flush();
                     $this->em->clear();
                 }
@@ -135,10 +143,13 @@ class ProcessEcoDataCommand extends Command
             unlink($file_path);
         }
 
-        /** @var Server $server */
-        $server = $this->em->getRepository(Server::class)->findOneBy(['name' => Server::SERVER_NAME]);
-        $server->setLastProcess(new \DateTime());
-        $this->em->flush();
+        if ($anything_new)
+        {
+            /** @var Server $server */
+            $server = $this->em->getRepository(Server::class)->findOneBy(['name' => Server::SERVER_NAME]);
+            $server->setLastProcess(new \DateTime());
+            $this->em->flush();
+        }
 
         return 0;
     }
