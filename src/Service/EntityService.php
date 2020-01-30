@@ -58,38 +58,4 @@ class EntityService
 
         return $entity_class;
     }
-
-    public function getUser(array $item)
-    {
-        if (!isset($item['Username']))
-        {
-            return null;
-        }
-
-        if (!$this->users)
-        {
-            $this->users = $this->em->getRepository(User::class)->findAll();
-        }
-
-        /** @var User $user */
-        foreach ($this->users as $user)
-        {
-            if ($item['Username'] !== $user->getUsername())
-            {
-                continue;
-            }
-
-            return $user;
-        }
-
-        $user = User::createFromItem($item);
-
-        $this->em->persist($user);
-        $this->em->flush();
-        $this->users[] = $user;
-
-        return $user;
-    }
-
-
 }

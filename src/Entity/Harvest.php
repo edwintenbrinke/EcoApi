@@ -17,27 +17,51 @@ class Harvest
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $username;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $time_seconds;
 
-    // TODO
-    public function __construct($time_seconds, $item_type)
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $species_name;
+
+    public function __construct($username, $time_seconds, $species_name)
     {
+        $this->username = $username;
         $this->time_seconds = $time_seconds;
+        $this->species_name = $species_name;
     }
 
-    public static function createFromEcoData(User $user, array $data)
+    public static function createFromEcoData(array $data)
     {
         return new self(
+            $data['Username'],
             $data['TimeSeconds'],
-            $data['ItemTypeName']
+            $data['SpeciesName']
         );
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     public function getTimeSeconds(): ?int
@@ -48,6 +72,18 @@ class Harvest
     public function setTimeSeconds(int $time_seconds): self
     {
         $this->time_seconds = $time_seconds;
+
+        return $this;
+    }
+
+    public function getSpeciesName(): ?string
+    {
+        return $this->species_name;
+    }
+
+    public function setSpeciesName(string $species_name): self
+    {
+        $this->species_name = $species_name;
 
         return $this;
     }

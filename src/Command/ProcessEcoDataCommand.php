@@ -89,7 +89,6 @@ class ProcessEcoDataCommand extends Command
             $collections = file_get_contents($file_path);
             $collections = json_decode($collections, true); // overwrite raw data to save memory
 
-            $limit = 250;
             foreach($collections as $collection => $data)
             {
                 // get entity class
@@ -100,17 +99,19 @@ class ProcessEcoDataCommand extends Command
                     continue;
                 }
 
-                // while loop
-                $spliced_data = array_splice($data, 0, $limit);
-                foreach ($spliced_data as $item)
-                {
-                    // get user
-                    $user = $this->entity_service->getUser($item);
-                    dd($user, $item);
-
-                    // exceptions are buy & sell -> they need to be counted before creating
-                    $entity = $entity_class::createFromEcoData($user, $item);
-                    $this->em->persist($entity);
+                $limit = 250;
+                while(count($data) > 0) {
+                    $this->log(sprintf('processing %s of file %s, %d records left', $collection, $file_name, count($data)));
+                    // while loop
+                    $spliced_data = array_splice($data, 0, $limit);
+                    foreach ($spliced_data as $item)
+                    {
+                        // exceptions are buy & sell -> they need to be counted before creating
+                        $entity = $entity_class::createFromEcoData($item);
+                        $this->em->persist($entity);
+                    }
+                    $this->em->flush();
+                    $this->em->clear();
                 }
             }
 

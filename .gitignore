@@ -9,4 +9,5 @@
 /vendor/
 /files/eco/
 /.idea/
+test.txt
 ###< symfony/framework-bundle ###

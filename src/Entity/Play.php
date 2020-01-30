@@ -17,6 +17,16 @@ class Play
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $username;
+
+    /**
+     * @ORM\Column(type="guid")
+     */
+    private $auth_id;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $time_seconds;
@@ -26,6 +36,13 @@ class Play
      */
     private $value;
 
+    /**
+     * TODO check if correct
+     * Play constructor.
+     *
+     * @param $time_seconds
+     * @param $item_type
+     */
     public function __construct($time_seconds, $item_type)
     {
         $this->time_seconds = $time_seconds;
@@ -43,6 +60,18 @@ class Play
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     public function getTimeSeconds(): ?int
