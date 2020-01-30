@@ -19,6 +19,16 @@ class BuyRepository extends ServiceEntityRepository
         parent::__construct($registry, Buy::class);
     }
 
+    public function deleteAllHigherThanId(int $_id)
+    {
+        $this->createQueryBuilder('q')
+            ->delete()
+            ->where('q._id >= :external_id')
+            ->setParameter('external_id', $_id)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Buy[] Returns an array of Buy objects
     //  */

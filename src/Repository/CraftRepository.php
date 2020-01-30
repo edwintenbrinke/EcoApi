@@ -19,6 +19,16 @@ class CraftRepository extends ServiceEntityRepository
         parent::__construct($registry, Craft::class);
     }
 
+    public function deleteAllHigherThanId(int $_id)
+    {
+        $this->createQueryBuilder('q')
+            ->delete()
+            ->where('q._id >= :external_id')
+            ->setParameter('external_id', $_id)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Craft[] Returns an array of Craft objects
     //  */

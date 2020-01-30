@@ -19,6 +19,16 @@ class PlayRepository extends ServiceEntityRepository
         parent::__construct($registry, Play::class);
     }
 
+    public function deleteAllHigherThanId(int $_id)
+    {
+        $this->createQueryBuilder('q')
+            ->delete()
+            ->where('q._id >= :external_id')
+            ->setParameter('external_id', $_id)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Play[] Returns an array of Play objects
     //  */

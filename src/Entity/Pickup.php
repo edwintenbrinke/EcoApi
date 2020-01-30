@@ -2,19 +2,28 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\DatetimeInfoTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="App\Repository\PickupRepository")
  */
 class Pickup
 {
+    use DatetimeInfoTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $_id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -36,8 +45,9 @@ class Pickup
      */
     private $item_type;
 
-    public function __construct($username, $auth_id, $time_seconds, $item_type)
+    public function __construct($_id, $username, $auth_id, $time_seconds, $item_type)
     {
+        $this->_id = $_id;
         $this->username = $username;
         $this->auth_id = $auth_id;
         $this->time_seconds = $time_seconds;
@@ -47,6 +57,7 @@ class Pickup
     public static function createFromEcoData(array $data)
     {
         return new self(
+            $data['_id'],
             $data['Username'],
             isset($data['AuthId']) ? $data['AuthId'] : null,
             $data['TimeSeconds'],
@@ -57,6 +68,11 @@ class Pickup
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getExternalId(): ?int
+    {
+        return $this->_id;
     }
 
     public function getUsername(): ?string
@@ -103,6 +119,13 @@ class Pickup
     public function setItemType(string $item_type): self
     {
         $this->item_type = $item_type;
+
+        return $this;
+    }
+
+    public function setId(int $_id): self
+    {
+        $this->_id = $_id;
 
         return $this;
     }

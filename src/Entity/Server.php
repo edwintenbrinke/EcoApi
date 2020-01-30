@@ -11,6 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Server
 {
+    // TODO make this configurable
+    public const SERVER_NAME = 'MaistasHaven';
+
     use DatetimeInfoTrait;
     /**
      * @ORM\Id()
@@ -25,9 +28,9 @@ class Server
     private $name;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $start_at;
+    private $last_process;
 
     public function getId(): ?int
     {
@@ -46,14 +49,14 @@ class Server
         return $this;
     }
 
-    public function getStartAt(): ?\DateTimeInterface
+    public function getLastProcess(): ?\DateTimeInterface
     {
-        return $this->start_at;
+        return $this->last_process;
     }
 
-    public function setStartAt(\DateTimeInterface $start_at): self
+    public function setLastProcess(?\DateTimeInterface $last_process): self
     {
-        $this->start_at = $start_at;
+        $this->last_process = $last_process;
 
         return $this;
     }

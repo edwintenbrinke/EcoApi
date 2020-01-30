@@ -2,19 +2,28 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\DatetimeInfoTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="App\Repository\SellRepository")
  */
 class Sell
 {
+    use DatetimeInfoTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $_id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -52,7 +61,6 @@ class Sell
     private $world_object_id;
 
     /**
-     * TODO check if correct
      * Play constructor.
      *
      * @param     $username
@@ -63,8 +71,9 @@ class Sell
      * @param     $world_object_id
      * @param int $amount
      */
-    public function __construct($username, $auth_id, $time_seconds, $item_type, $world_object_type, $world_object_id, $amount = 0)
+    public function __construct($_id, $username, $auth_id, $time_seconds, $item_type, $world_object_type, $world_object_id, $amount = 0)
     {
+        $this->_id = $_id;
         $this->username = $username;
         $this->auth_id = $auth_id;
         $this->time_seconds = $time_seconds;
@@ -74,22 +83,28 @@ class Sell
         $this->amount = $amount;
     }
 
-    public static function createFromEcoData(array $data, int $amount = 0)
+    public static function createFromEcoData(array $data)
     {
         return new self(
+            $data['_id'],
             $data['Username'],
             $data['AuthId'],
             $data['TimeSeconds'],
             $data['ItemTypeName'],
             $data['WorldObjectTypeName'],
             $data['WorldObjectId'],
-            $amount
+            $data['Amount']
         );
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getExternalId(): ?int
+    {
+        return $this->_id;
     }
 
     public function getUsername(): ?string
@@ -172,6 +187,13 @@ class Sell
     public function setWorldObjectId(string $world_object_id): self
     {
         $this->world_object_id = $world_object_id;
+
+        return $this;
+    }
+
+    public function setId(int $_id): self
+    {
+        $this->_id = $_id;
 
         return $this;
     }

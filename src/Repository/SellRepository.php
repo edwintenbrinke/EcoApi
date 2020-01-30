@@ -19,6 +19,16 @@ class SellRepository extends ServiceEntityRepository
         parent::__construct($registry, Sell::class);
     }
 
+    public function deleteAllHigherThanId(int $_id)
+    {
+        $this->createQueryBuilder('q')
+            ->delete()
+            ->where('q._id >= :external_id')
+            ->setParameter('external_id', $_id)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Sell[] Returns an array of Sell objects
     //  */

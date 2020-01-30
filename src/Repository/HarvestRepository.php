@@ -19,6 +19,16 @@ class HarvestRepository extends ServiceEntityRepository
         parent::__construct($registry, Harvest::class);
     }
 
+    public function deleteAllHigherThanId(int $_id)
+    {
+        $this->createQueryBuilder('q')
+            ->delete()
+            ->where('q._id >= :external_id')
+            ->setParameter('external_id', $_id)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Harvest[] Returns an array of Harvest objects
     //  */

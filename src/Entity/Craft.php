@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\DatetimeInfoTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="App\Repository\CraftRepository")
  */
 class Craft
 {
+    use DatetimeInfoTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -17,12 +21,17 @@ class Craft
     private $id;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $_id;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $username;
 
     /**
-     * @ORM\Column(type="guid")
+     * @ORM\Column(type="guid", nullable=true)
      */
     private $auth_id;
 
@@ -47,8 +56,9 @@ class Craft
     private $world_object_type;
 
 
-    public function __construct($username, $auth_id, $time_seconds, $item_type, $world_object_id, $world_object_type)
+    public function __construct($_id, $username, $auth_id, $time_seconds, $item_type, $world_object_id, $world_object_type)
     {
+        $this->_id = $_id;
         $this->username = $username;
         $this->auth_id = $auth_id;
         $this->time_seconds = $time_seconds;
@@ -60,8 +70,9 @@ class Craft
     public static function createFromEcoData(array $data)
     {
         return new self(
+            $data['_id'],
             $data['Username'],
-            $data['AuthId'],
+            isset($data['AuthId']) ? $data['AuthId'] : null,
             $data['TimeSeconds'],
             $data['ItemTypeName'],
             $data['WorldObjectId'],
@@ -72,6 +83,11 @@ class Craft
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getExternalId(): ?int
+    {
+        return $this->_id;
     }
 
     public function getUsername(): ?string
@@ -142,6 +158,13 @@ class Craft
     public function setWorldObjectType(string $world_object_type): self
     {
         $this->world_object_type = $world_object_type;
+
+        return $this;
+    }
+
+    public function setId(int $_id): self
+    {
+        $this->_id = $_id;
 
         return $this;
     }

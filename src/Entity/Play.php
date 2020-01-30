@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\DatetimeInfoTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="App\Repository\PlayRepository")
  */
 class Play
 {
+    use DatetimeInfoTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -17,14 +21,14 @@ class Play
     private $id;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $_id;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $username;
-
-    /**
-     * @ORM\Column(type="guid")
-     */
-    private $auth_id;
 
     /**
      * @ORM\Column(type="integer")
@@ -37,29 +41,38 @@ class Play
     private $value;
 
     /**
-     * TODO check if correct
      * Play constructor.
      *
+     * @param $username
      * @param $time_seconds
-     * @param $item_type
+     * @param $value
      */
-    public function __construct($time_seconds, $item_type)
+    public function __construct($_id, $username, $time_seconds, $value)
     {
+        $this->_id = $_id;
+        $this->username = $username;
         $this->time_seconds = $time_seconds;
-        $this->item_type = $item_type;
+        $this->value = $value;
     }
 
-    public static function createFromEcoData(User $user, array $data)
+    public static function createFromEcoData(array $data)
     {
         return new self(
+            $data['_id'],
+            $data['Username'],
             $data['TimeSeconds'],
-            $data['ItemTypeName']
+            $data['Value']
         );
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getExternalId(): ?int
+    {
+        return $this->_id;
     }
 
     public function getUsername(): ?string
@@ -94,6 +107,13 @@ class Play
     public function setValue(float $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function setId(int $_id): self
+    {
+        $this->_id = $_id;
 
         return $this;
     }

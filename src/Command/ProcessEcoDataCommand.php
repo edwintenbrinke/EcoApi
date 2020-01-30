@@ -10,6 +10,7 @@ use App\Entity\Pickup;
 use App\Entity\Place;
 use App\Entity\Play;
 use App\Entity\Sell;
+use App\Entity\Server;
 use App\Entity\User;
 use App\Service\EntityService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class ProcessEcoDataCommand
- * @example php bin/console eco:data:process 5
+ * @example php bin/console eco:data:process
  * @author Edwin ten Brinke <edwin.ten.brinke@extendas.com>
  */
 class ProcessEcoDataCommand extends Command
@@ -91,6 +92,12 @@ class ProcessEcoDataCommand extends Command
 
             foreach($collections as $collection => $data)
             {
+                if (count($data) === 0)
+                {
+                    $this->log(sprintf('%s is empty', $collection));
+                    continue;
+                }
+
                 // get entity class
                 $entity_class = EntityService::chooseEntityClass($collection);
                 if (!$entity_class)
@@ -99,23 +106,39 @@ class ProcessEcoDataCommand extends Command
                     continue;
                 }
 
+                // if there has been a reset, delete all records >= _id
+                $repo = $this->em->getRepository($entity_class);
+                /** @var Pickup[] $last_record */
+                $last_record = $repo->findBy([],['_id'=>'DESC'],1,0);
+                if ($last_record[0]->getExternalId() > $data[0]['_id'])
+                {
+                    $this->log('there has been a reset');
+                    $repo->deleteAllHigherThanId($data[0]['_id']);
+                }
+
                 $limit = 250;
                 while(count($data) > 0) {
-                    $this->log(sprintf('processing %s of file %s, %d records left', $collection, $file_name, count($data)));
                     // while loop
                     $spliced_data = array_splice($data, 0, $limit);
-                    foreach ($spliced_data as $item)
+                    foreach ($spliced_data as $class_data)
                     {
-                        // exceptions are buy & sell -> they need to be counted before creating
-                        $entity = $entity_class::createFromEcoData($item);
-                        $this->em->persist($entity);
+                        $this->entity_service->createEntity($entity_class, $class_data);
                     }
                     $this->em->flush();
                     $this->em->clear();
                 }
+
+                // if sale or buy is the last in the data array, finish the last sale/buy
+                $this->entity_service->finishStackedData();
             }
 
+            unlink($file_path);
         }
+
+        /** @var Server $server */
+        $server = $this->em->getRepository(Server::class)->findOneBy(['name' => Server::SERVER_NAME]);
+        $server->setLastProcess(new \DateTime());
+        $this->em->flush();
 
         return 0;
     }
