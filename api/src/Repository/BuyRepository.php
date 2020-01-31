@@ -24,7 +24,7 @@ class BuyRepository extends ServiceEntityRepository
     {
         $this->createQueryBuilder('q')
             ->delete()
-            ->where('q._id >= :external_id')
+            ->where('q.external_id >= :external_id')
             ->setParameter('external_id', $_id)
             ->getQuery()
             ->getResult();
