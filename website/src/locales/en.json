@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "admin": "Admin",
+    "dashboard": "Dashboard",
+    "login": "Login Page",
+    "sell": "Sold",
+    "craft": "Crafted",
+    "harvest": "Harvested",
+    "pickup": "Picked up",
+    "place": "Placed",
+    "play": "Playtime",
+    "buy": "Bought"
+  }
+}

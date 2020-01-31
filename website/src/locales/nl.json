@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "admin": "Admin",
+    "dashboard": "Dashboard",
+    "login": "Login Page",
+    "sell": "Verkocht",
+    "buy": "Gekocht",
+    "craft": "Gemaakt",
+    "harvest": "Geoogst",
+    "pickup": "Opgepakt",
+    "place": "Geplaatst",
+    "play": "Speel tijd"
+  }
+}
