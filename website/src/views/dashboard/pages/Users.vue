@@ -7,8 +7,8 @@
     <v-col cols="12">
       <base-material-card
         color="primary"
-        icon="mdi-map-marker"
-        :title="this.$t('nav.craft')"
+        icon="mdi-account-group"
+        :title="this.$t('nav.users')"
         class="px-5 py-3"
       >
         <v-col>
@@ -25,8 +25,14 @@
             :server-items-length="totalItems"
             :multi-sort="true"
           >
-            <template v-slot:item.time_seconds="{ item }">
-              {{ item.time_seconds | secondsToDays }}
+            <template v-slot:item.total_play_time="{ item }">
+              {{ item.total_play_time | secondsToDays }}
+            </template>
+            <template v-slot:item.last_online_time="{ item }">
+              {{ item.last_online_time | secondsToDays }}
+            </template>
+            <template v-slot:item.online="{ item }">
+              {{ item.online ? "true" : "false" }}
             </template>
             <template v-slot:item.created_at="{ item }">
               {{ item.created_at | localizedDatetime }}
@@ -54,17 +60,18 @@
     data: () => ({
       search: '',
       headers: [
-        { text: 'Username', value: 'username', search: true },
-        { text: 'World time', value: 'time_seconds', search: false },
-        { text: 'Item', value: 'item_type', search: true },
-        { text: 'From', value: 'world_object_type', search: true },
-        { text: 'Received at', value: 'created_at', search: true },
+        { text: 'Username', value: 'name', search: true },
+        { text: 'Total play time', value: 'total_play_time', search: false },
+        { text: 'Last online', value: 'last_online_time', search: false },
+        { text: 'online', value: 'online', search: false },
+        { text: 'Received at', value: 'created_at', search: false },
       ],
       data: [],
       options: {},
       totalItems: 0,
       loading: true,
     }),
+
     computed: {
       params () {
         return {
@@ -85,7 +92,7 @@
     methods: {
       async getDataFromApi () {
         this.loading = true
-        let response = await this.$http.get('/api/craft', { params: { options: this.params } })
+        let response = await this.$http.get('/api/users', { params: { options: this.params } })
         this.data = response.data.items
         this.totalItems = response.data.total_items_count
         this.loading = false

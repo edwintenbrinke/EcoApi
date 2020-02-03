@@ -7,12 +7,13 @@
     <v-col cols="12">
       <base-material-card
         color="primary"
-        icon="mdi-map-marker"
-        :title="this.$t('nav.place')"
+        icon="mdi-shovel"
+        :title="this.$t('nav.pickup')"
         class="px-5 py-3"
       >
         <v-col>
           <v-card-title>
+            Last update: {{ $store.state.server.export_last_process | localizedDatetime }}
             <v-spacer />
             <search-text-field :value.sync="search" />
           </v-card-title>
@@ -84,7 +85,7 @@
     methods: {
       async getDataFromApi () {
         this.loading = true
-        let response = await this.$http.get('/api/place', { params: { options: this.params } })
+        let response = await this.$http.get('/api/pickup', { params: { options: this.params } })
         this.data = response.data.items
         this.totalItems = response.data.total_items_count
         this.loading = false

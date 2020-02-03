@@ -7,12 +7,13 @@
     <v-col cols="12">
       <base-material-card
         color="primary"
-        icon="mdi-map-marker"
-        :title="this.$t('nav.buy')"
+        icon="mdi-shovel-off"
+        :title="this.$t('nav.place')"
         class="px-5 py-3"
       >
         <v-col>
           <v-card-title>
+            Last update: {{ $store.state.server.export_last_process | localizedDatetime }}
             <v-spacer />
             <search-text-field :value.sync="search" />
           </v-card-title>
@@ -50,15 +51,13 @@
 <script>
   import SearchTextField from '@/views/dashboard/components/custom/SearchTextField'
   export default {
-    components: {SearchTextField},
+    components: { SearchTextField },
     data: () => ({
       search: '',
       headers: [
-        {text: 'Username', value: 'username', search: true},
-        {text: 'World time', value: 'time_seconds', search: false},
-        {text: 'Amount', value: 'amount', search: true},
-        {text: 'Item', value: 'item_type', search: true},
-        {text: 'From', value: 'world_object_type', search: true},
+        { text: 'Username', value: 'username', search: true },
+        { text: 'World time', value: 'time_seconds', search: false },
+        { text: 'Item', value: 'item_type', search: true },
         { text: 'Received at', value: 'created_at', search: true },
       ],
       data: [],
@@ -67,7 +66,7 @@
       loading: true,
     }),
     computed: {
-      params() {
+      params () {
         return {
           ...this.options,
           query: this.search,
@@ -77,16 +76,16 @@
     },
     watch: {
       params: {
-        handler() {
+        handler () {
           this.getDataFromApi()
         },
         deep: true,
       },
     },
     methods: {
-      async getDataFromApi() {
+      async getDataFromApi () {
         this.loading = true
-        let response = await this.$http.get('/api/buy', {params: {options: this.params}})
+        let response = await this.$http.get('/api/place', { params: { options: this.params } })
         this.data = response.data.items
         this.totalItems = response.data.total_items_count
         this.loading = false

@@ -1,6 +1,8 @@
 {
   "nav": {
-    "admin": "Admin",
+    "users": "Users",
+    "trades": "Trades",
+    "logs": "Logs",
     "dashboard": "Dashboard",
     "login": "Login Page",
     "sell": "Sold",

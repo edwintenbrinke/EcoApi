@@ -29,9 +29,13 @@ abstract class BaseController extends AbstractController
      *
      * @return Response
      */
-    public function jsonResponse(SerializerInterface $serializer, $data, $groups = null)
+    public function jsonResponse(SerializerInterface $serializer, $data, array $groups = null)
     {
         $context = [];
+        if (is_array($groups))
+        {
+            $context = ['groups' => $groups];
+        }
 
         return new JsonResponse(
             $serializer->serialize(

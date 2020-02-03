@@ -7,8 +7,8 @@
     <v-col cols="12">
       <base-material-card
         color="primary"
-        icon="mdi-map-marker"
-        :title="this.$t('nav.play')"
+        icon="mdi-cart"
+        :title="this.$t('nav.trades')"
         class="px-5 py-3"
       >
         <v-col>
@@ -25,8 +25,8 @@
             :server-items-length="totalItems"
             :multi-sort="true"
           >
-            <template v-slot:item.time_seconds="{ item }">
-              {{ item.time_seconds | secondsToDays }}
+            <template v-slot:item.buying="{ item }">
+              {{ item.buying ? "Buying" : "Selling" }}
             </template>
             <template v-slot:item.created_at="{ item }">
               {{ item.created_at | localizedDatetime }}
@@ -54,16 +54,20 @@
     data: () => ({
       search: '',
       headers: [
-        { text: 'Username', value: 'username', search: true },
-        { text: 'World time', value: 'time_seconds', search: false },
-        { text: 'Play time', value: 'value', search: true },
-        { text: 'Received at', value: 'created_at', search: true },
+        { text: 'Item name', value: 'name', search: true },
+        { text: 'Buying | Selling', value: 'buying', search: false },
+        { text: 'Price', value: 'price', search: false },
+        { text: 'Amount', value: 'max_num_wanted', search: false },
+        { text: 'Shop name', value: 'store.name', search: false },
+        { text: 'Username', value: 'store.user.name', search: true },
+        { text: 'Currency', value: 'store.currency_name', search: false }
       ],
       data: [],
       options: {},
       totalItems: 0,
       loading: true,
     }),
+
     computed: {
       params () {
         return {
@@ -84,7 +88,7 @@
     methods: {
       async getDataFromApi () {
         this.loading = true
-        let response = await this.$http.get('/api/play', { params: { options: this.params } })
+        let response = await this.$http.get('/api/offers', { params: { options: this.params } })
         this.data = response.data.items
         this.totalItems = response.data.total_items_count
         this.loading = false

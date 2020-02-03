@@ -15,6 +15,7 @@ services:
             # parameters
             $eco_api_logger: '@eco_api_logger'
             $eco_process_logger: '@eco_process_logger'
+            $eco_process_mod_data_logger: '@eco_process_mod_data_logger'
             $eco_data_folder: '%eco_data_folder%'
             $eco_access_token: '%env(ECO_ACCESS_TOKEN)%'
 
@@ -33,12 +34,6 @@ services:
 
     Symfony\Component\Serializer\Normalizer\DateTimeNormalizer:
         - datetime_format: 'Y-m-d\TH:i:sO'
-
-    Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer:
-        public: true
-        arguments: ['@serializer.mapping.class_metadata_factory', '@serializer.name_converter.camel_case_to_snake_case']
-        tags: [serializer.normalizer]
-
 
     eco_api_logger:
         class: Symfony\Bridge\Monolog\Logger
@@ -60,5 +55,15 @@ services:
     eco_process_logger_handler:
         class: Monolog\Handler\RotatingFileHandler
         arguments: ['%kernel.project_dir%/var/log/%kernel.environment%.eco.process.log', 14]
+
+    eco_process_mod_data_logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [eco]
+        calls:
+            - [pushHandler, ['@eco_process_mod_data_logger_handler']]
+
+    eco_process_mod_data_logger_handler:
+        class: Monolog\Handler\RotatingFileHandler
+        arguments: ['%kernel.project_dir%/var/log/%kernel.environment%.eco.process.mod.log', 14]
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

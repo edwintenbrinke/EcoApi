@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\DatetimeInfoTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\HasLifecycleCallbacks()
@@ -17,46 +18,55 @@ class Sell
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"public"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"public"})
      */
     private $external_id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"public"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="guid")
+     * @Groups({"public"})
      */
     private $auth_id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"public"})
      */
     private $time_seconds;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"public"})
      */
     private $amount;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"public"})
      */
     private $item_type;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"public"})
      */
     private $world_object_type;
 
     /**
      * @ORM\Column(type="guid")
+     * @Groups({"public"})
      */
     private $world_object_id;
 

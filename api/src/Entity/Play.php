@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\DatetimeInfoTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\HasLifecycleCallbacks()
@@ -17,26 +18,31 @@ class Play
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"public"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"public"})
      */
     private $external_id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"public"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"public"})
      */
     private $time_seconds;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"public"})
      */
     private $value;
 

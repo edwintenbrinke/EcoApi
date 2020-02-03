@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Service\ProcessModDataService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,6 +25,50 @@ class EcoDataController extends AbstractController
     public function test()
     {
         return new JsonResponse(['message' => 'hi']);
+    }
+
+    /**
+     * @Route("/api/eco/mod/data", name="api_eco_mod_data")
+     * @param Request               $request
+     * @param LoggerInterface       $eco_process_mod_data_logger
+     * @param ProcessModDataService $mod_data_service
+     * @param                       $eco_access_token
+     *
+     * @return JsonResponse
+     */
+    public function getModData(Request $request, LoggerInterface $eco_process_mod_data_logger, ProcessModDataService $mod_data_service, $eco_access_token)
+    {
+        // authorize
+        $token = $request->headers->get('Authorization');
+        if (!$token)
+        {
+            throw new UnauthorizedHttpException('Add Authorization token', 'No Authorization header found');
+        }
+
+        if ($token !== $eco_access_token)
+        {
+            throw new UnauthorizedHttpException('Invalid token', 'You\'re not authorized to access this url');
+        }
+
+        $eco_process_mod_data_logger->info('Request', ['headers' => $request->headers]);
+
+        $content = json_decode($request->getContent(), true);
+        if (!is_array($content)) $content = [];
+        foreach($content as $collection)
+        {
+            if (array_key_exists('server', $collection))
+            {
+                $mod_data_service->processServerData($collection['server']);
+            }
+            elseif (array_key_exists('users', $collection))
+            {
+                $mod_data_service->processUserData($collection['users']);
+            }
+        }
+
+        return new JsonResponse([
+            'message' => 'Data receiverd'
+        ]);
     }
 
     /**

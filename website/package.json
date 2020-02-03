@@ -25,7 +25,8 @@
     "vue2-editor": "^2.10.2",
     "vue2-google-maps": "0.8.4",
     "vuetify": "^2.0.0",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-persist": "^2.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",

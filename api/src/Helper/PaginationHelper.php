@@ -39,6 +39,11 @@ class PaginationHelper
                 {
                     $filter = sprintf('%s.%s', $alias[0], $filter);
                 }
+                else if (substr_count($filter, '.') > 1)
+                {
+                    $results = array_slice(explode('.', $filter), -2, 2);
+                    $filter = implode('.', $results);
+                }
 
                 $qb->addOrderBy($filter, $order);
             }
@@ -76,6 +81,11 @@ class PaginationHelper
                 if (!strpos($value, '.'))
                 {
                     $value = sprintf('%s.%s', $alias[0], $value);
+                }
+                else if (substr_count($value, '.') > 1)
+                {
+                    $results = array_slice(explode('.', $value), -2, 2);
+                    $value = implode('.', $results);
                 }
 
                 $query[] = sprintf("%s LIKE '%%%s%%'", $value, $options->query);

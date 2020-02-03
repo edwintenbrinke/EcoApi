@@ -3,6 +3,7 @@
 namespace App\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  *** ORM\HasLifecycleCallbacks() needs to be added to the entity to make this work.
@@ -18,12 +19,14 @@ trait DatetimeInfoTrait
     /**
      * @var \DateTime
      * @ORM\Column(type="datetime")
+     * @Groups({"public"})
      */
     private $created_at;
 
     /**
      * @var \DateTime
      * @ORM\Column(type="datetime")
+     * @Groups({"public"})
      */
     private $updated_at;
 

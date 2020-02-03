@@ -7,12 +7,13 @@
     <v-col cols="12">
       <base-material-card
         color="primary"
-        icon="mdi-map-marker"
-        :title="this.$t('nav.harvest')"
+        icon="mdi-account-clock"
+        :title="this.$t('nav.play')"
         class="px-5 py-3"
       >
         <v-col>
           <v-card-title>
+            Last update: {{ $store.state.server.export_last_process | localizedDatetime }}
             <v-spacer />
             <search-text-field :value.sync="search" />
           </v-card-title>
@@ -56,7 +57,7 @@
       headers: [
         { text: 'Username', value: 'username', search: true },
         { text: 'World time', value: 'time_seconds', search: false },
-        { text: 'Species', value: 'species_name', search: true },
+        { text: 'Play time', value: 'value', search: true },
         { text: 'Received at', value: 'created_at', search: true },
       ],
       data: [],
@@ -84,7 +85,7 @@
     methods: {
       async getDataFromApi () {
         this.loading = true
-        let response = await this.$http.get('/api/harvest', { params: { options: this.params } })
+        let response = await this.$http.get('/api/play', { params: { options: this.params } })
         this.data = response.data.items
         this.totalItems = response.data.total_items_count
         this.loading = false

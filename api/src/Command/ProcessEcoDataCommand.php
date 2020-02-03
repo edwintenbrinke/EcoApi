@@ -146,7 +146,7 @@ class ProcessEcoDataCommand extends Command
         {
             /** @var Server $server */
             $server = $this->em->getRepository(Server::class)->findOneBy(['name' => Server::SERVER_NAME]);
-            $server->setLastProcess(new \DateTime());
+            $server->setExportLastProcess(new \DateTime());
             $this->em->flush();
         }
 

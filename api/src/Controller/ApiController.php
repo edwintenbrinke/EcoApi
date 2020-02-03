@@ -10,10 +10,14 @@ use App\Entity\Server;
 use App\Repository\BuyRepository;
 use App\Repository\CraftRepository;
 use App\Repository\HarvestRepository;
+use App\Repository\OfferRepository;
 use App\Repository\PickupRepository;
 use App\Repository\PlaceRepository;
 use App\Repository\PlayRepository;
 use App\Repository\SellRepository;
+use App\Repository\ServerRepository;
+use App\Repository\StoreRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,22 +35,74 @@ use Symfony\Component\Serializer\SerializerInterface;
 class ApiController extends BaseController
 {
     /**
-     * @Route("/server", name="server_info", methods={"GET"})
-     * @param EntityManagerInterface $em
-     * @param SerializerInterface    $serializer
+     * @Route("/users", name="users_info", methods={"GET"})
+     * @param UserRepository      $user_repository
+     * @param SerializerInterface $serializer
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function getServerData(EntityManagerInterface $em, SerializerInterface $serializer)
+    public function getUserData(Request $request, UserRepository $user_repository, SerializerInterface $serializer)
     {
-        return new JsonResponse(
-            $serializer->serialize(
-                $em->getRepository(Server::class)->findOneBy(['name' => Server::SERVER_NAME]),
-                'json'
-            ),
-            Response::HTTP_OK,
-            [],
-            true
+        $options = json_decode($request->query->get('options'));
+        return $this->jsonResponse(
+            $serializer,
+            [
+                'items' => $user_repository->findPaginatedForPortal($options),
+                'total_items_count' => (int) $user_repository->countPaginatedAll($options),
+            ],
+            self::SERIALIZE_PUBLIC
+        );
+    }
+
+    /**
+     * @Route("/trades", name="trades_info", methods={"GET"})
+     * @param StoreRepository     $store_repository
+     * @param SerializerInterface $serializer
+     *
+     * @return Response
+     */
+    public function getTrades(StoreRepository $store_repository, SerializerInterface $serializer)
+    {
+        return $this->jsonResponse(
+            $serializer,
+            $store_repository->findAll(),
+            self::SERIALIZE_PUBLIC
+        );
+    }
+
+    /**
+     * @Route("/offers", name="offers_info", methods={"GET"})
+     * @param OfferRepository     $offer_repository
+     * @param SerializerInterface $serializer
+     *
+     * @return Response
+     */
+    public function getOffers(Request $request, OfferRepository $offer_repository, SerializerInterface $serializer)
+    {
+        $options = json_decode($request->query->get('options'));
+        return $this->jsonResponse(
+            $serializer,
+            [
+                'items' => $offer_repository->findPaginatedForPortal($options),
+                'total_items_count' => (int) $offer_repository->countPaginatedAll($options),
+            ],
+            ['offers']
+        );
+    }
+
+    /**
+     * @Route("/server", name="server_info", methods={"GET"})
+     * @param ServerRepository    $server_repository
+     * @param SerializerInterface $serializer
+     *
+     * @return Response
+     */
+    public function getServerData(ServerRepository $server_repository, SerializerInterface $serializer)
+    {
+        return $this->jsonResponse(
+            $serializer,
+            $server_repository->findOneBy(['name' => Server::SERVER_NAME]),
+            self::SERIALIZE_PUBLIC
         );
     }
     /**
@@ -66,7 +122,7 @@ class ApiController extends BaseController
                     'items' => $sell_repository->findPaginatedForPortal($options),
                     'total_items_count' => (int) $sell_repository->countPaginatedAll($options),
                 ],
-                'json'
+            self::SERIALIZE_PUBLIC
         );
     }
 
@@ -87,7 +143,7 @@ class ApiController extends BaseController
                 'items' => $buy_repository->findPaginatedForPortal($options),
                 'total_items_count' => (int) $buy_repository->countPaginatedAll($options),
             ],
-            'json'
+            self::SERIALIZE_PUBLIC
         );
     }
 
@@ -108,7 +164,7 @@ class ApiController extends BaseController
                 'items' => $craft_repository->findPaginatedForPortal($options),
                 'total_items_count' => (int) $craft_repository->countPaginatedAll($options),
             ],
-            'json'
+            self::SERIALIZE_PUBLIC
         );
     }
 
@@ -129,7 +185,7 @@ class ApiController extends BaseController
                 'items' => $harvest_repository->findPaginatedForPortal($options),
                 'total_items_count' => (int) $harvest_repository->countPaginatedAll($options),
             ],
-            'json'
+            self::SERIALIZE_PUBLIC
         );
     }
 
@@ -150,7 +206,7 @@ class ApiController extends BaseController
                 'items' => $pickup_repository->findPaginatedForPortal($options),
                 'total_items_count' => (int) $pickup_repository->countPaginatedAll($options),
             ],
-            'json'
+            self::SERIALIZE_PUBLIC
         );
     }
 
@@ -171,7 +227,7 @@ class ApiController extends BaseController
                 'items' => $place_repository->findPaginatedForPortal($options),
                 'total_items_count' => (int) $place_repository->countPaginatedAll($options),
             ],
-            'json'
+            self::SERIALIZE_PUBLIC
         );
     }
 
@@ -192,7 +248,7 @@ class ApiController extends BaseController
                 'items' => $play_repository->findPaginatedForPortal($options),
                 'total_items_count' => (int) $play_repository->countPaginatedAll($options),
             ],
-            'json'
+            self::SERIALIZE_PUBLIC
         );
     }
 }
