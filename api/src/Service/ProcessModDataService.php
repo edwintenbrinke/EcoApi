@@ -43,7 +43,12 @@ class ProcessModDataService
         foreach($data as $user_data)
         {
             // if user doesn't exist, create it
+            // make this better
             $user = $this->entityArraySearch($existing_users, 'getSlgId', $user_data['slg_id']);
+            if (!$user)
+            {
+                $user = $this->entityArraySearch($existing_users, 'getSteamId', $user_data['steam_id']);
+            }
             if (!$user)
             {
                 $user = User::createFromModData($user_data);
