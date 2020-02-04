@@ -41,13 +41,13 @@ class Store
     private $currency_name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="stores")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="stores", cascade={"persist"})
      * @Groups({"offers"})
      */
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Offer", mappedBy="store", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Offer", mappedBy="store", cascade={"remove", "persist"})
      */
     private $offers;
 

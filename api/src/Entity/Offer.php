@@ -47,7 +47,7 @@ class Offer
     private $max_num_wanted;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Store", inversedBy="offers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Store", inversedBy="offers", cascade={"persist"})
      * @Groups({"offers"})
      */
     private $store;
