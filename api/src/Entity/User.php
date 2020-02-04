@@ -74,7 +74,7 @@ class User
     private $online;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Store", mappedBy="user", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Store", mappedBy="user", cascade={"remove", "persist"})
      */
     private $stores;
 
