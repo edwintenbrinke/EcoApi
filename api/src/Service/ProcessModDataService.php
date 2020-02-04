@@ -48,6 +48,7 @@ class ProcessModDataService
             {
                 $user = User::createFromModData($user_data);
                 $this->em->persist($user);
+                $this->em->flush();
             }
             else
             {
