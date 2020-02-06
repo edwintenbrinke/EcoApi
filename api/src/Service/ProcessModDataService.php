@@ -60,7 +60,7 @@ class ProcessModDataService
             }
             $this->processTradeData($user, $user_data['store_offers']);
             $this->em->flush();
-            $this->em->clear();
+            //$this->em->clear();
             $keep[$user->getId()] = $user;
         }
         $this->removeData($keep, $existing_users);

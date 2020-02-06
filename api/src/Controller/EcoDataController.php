@@ -36,7 +36,7 @@ class EcoDataController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function getModData(Request $request, LoggerInterface $eco_process_mod_data_logger, ProcessModDataService $mod_data_service, $eco_access_token)
+    public function getModData(Request $request, LoggerInterface $eco_process_mod_data_logger, ProcessModDataService $mod_data_service, $eco_data_folder, $eco_access_token)
     {
         // authorize
         $token = $request->headers->get('Authorization');
@@ -49,6 +49,19 @@ class EcoDataController extends AbstractController
         {
             throw new UnauthorizedHttpException('Invalid token', 'You\'re not authorized to access this url');
         }
+
+        $file_name = sprintf('log-%s.json', (new \DateTime())->format('Y-m-d\TH:i:s'));
+        $file_path = sprintf('%s%s', $eco_data_folder, $file_name);
+        $temp_file = fopen(
+            $file_path,
+            'w'
+        );
+
+        fwrite(
+            $temp_file,
+            $request->getContent()
+        );
+        fclose($temp_file);
 
         $eco_process_mod_data_logger->info('Request', ['headers' => $request->headers]);
 
