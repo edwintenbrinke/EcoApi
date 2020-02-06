@@ -50,11 +50,11 @@ class ProcessEcoModDataCommand extends Command
     private $mod_data_service;
 
     public function __construct(
-        EntityManagerInterface $entity_manager, LoggerInterface $eco_process_logger, EntityService $entity_service,
+        EntityManagerInterface $entity_manager, LoggerInterface $eco_process_mod_data_logger, EntityService $entity_service,
         ProcessModDataService $mod_data_service, string $eco_mod_data_folder
     ) {
         $this->em = $entity_manager;
-        $this->logger = $eco_process_logger;
+        $this->logger = $eco_process_mod_data_logger;
         $this->eco_data_folder = $eco_mod_data_folder;
         $this->mod_data_service = $mod_data_service;
         $this->entity_service = $entity_service;
