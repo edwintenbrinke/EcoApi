@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     eco_data_folder: '%kernel.project_dir%/%env(ECO_DATA_FOLDER)%'
+    eco_mod_data_folder: '%kernel.project_dir%/%env(ECO_MOD_DATA_FOLDER)%'
 
 services:
     # default configuration for services in *this* file
@@ -17,6 +18,7 @@ services:
             $eco_process_logger: '@eco_process_logger'
             $eco_process_mod_data_logger: '@eco_process_mod_data_logger'
             $eco_data_folder: '%eco_data_folder%'
+            $eco_mod_data_folder: '%eco_mod_data_folder%'
             $eco_access_token: '%env(ECO_ACCESS_TOKEN)%'
 
     # makes classes in src/ available to be used as services

@@ -43,6 +43,11 @@ class Server
     private $export_last_process;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $mod_last_process;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"public"})
      */
@@ -221,6 +226,18 @@ class Server
     public function setDetailedDescription(?string $detailed_description): self
     {
         $this->detailed_description = $detailed_description;
+
+        return $this;
+    }
+
+    public function getModLastProcess(): ?\DateTimeInterface
+    {
+        return $this->mod_last_process;
+    }
+
+    public function setModLastProcess(?\DateTimeInterface $mod_last_process): self
+    {
+        $this->mod_last_process = $mod_last_process;
 
         return $this;
     }

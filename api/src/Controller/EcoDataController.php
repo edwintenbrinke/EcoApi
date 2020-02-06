@@ -30,13 +30,13 @@ class EcoDataController extends AbstractController
     /**
      * @Route("/api/eco/mod/data", name="api_eco_mod_data")
      * @param Request               $request
-     * @param LoggerInterface       $eco_process_mod_data_logger
-     * @param ProcessModDataService $mod_data_service
+     * @param                       $eco_mod_data_folder
      * @param                       $eco_access_token
      *
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function getModData(Request $request, LoggerInterface $eco_process_mod_data_logger, ProcessModDataService $mod_data_service, $eco_data_folder, $eco_access_token)
+    public function getModData(Request $request, $eco_mod_data_folder, $eco_access_token)
     {
         // authorize
         $token = $request->headers->get('Authorization');
@@ -50,8 +50,8 @@ class EcoDataController extends AbstractController
             throw new UnauthorizedHttpException('Invalid token', 'You\'re not authorized to access this url');
         }
 
-        $file_name = sprintf('log-%s.json', (new \DateTime())->format('Y-m-d\TH:i:s'));
-        $file_path = sprintf('%s%s', $eco_data_folder, $file_name);
+        $file_name = sprintf('mod-data-%s.json', (new \DateTime())->format('Y-m-d\TH:i:s'));
+        $file_path = sprintf('%s%s', $eco_mod_data_folder, $file_name);
         $temp_file = fopen(
             $file_path,
             'w'
@@ -62,22 +62,6 @@ class EcoDataController extends AbstractController
             $request->getContent()
         );
         fclose($temp_file);
-
-        $eco_process_mod_data_logger->info('Request', ['headers' => $request->headers]);
-
-        $content = json_decode($request->getContent(), true);
-        if (!is_array($content)) $content = [];
-        foreach($content as $collection)
-        {
-            if (array_key_exists('server', $collection))
-            {
-                $mod_data_service->processServerData($collection['server']);
-            }
-            elseif (array_key_exists('users', $collection))
-            {
-                $mod_data_service->processUserData($collection['users']);
-            }
-        }
 
         return new JsonResponse([
             'message' => 'Data receiverd'

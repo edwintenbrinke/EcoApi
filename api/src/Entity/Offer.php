@@ -8,6 +8,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\HasLifecycleCallbacks()
+ * @ORM\Table(indexes={
+ *     @ORM\Index(name="idx_item_name", columns={"name"}),
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\OfferRepository")
  */
 class Offer
