@@ -59,7 +59,7 @@ class EcoDataController extends AbstractController
 
         fwrite(
             $temp_file,
-            $request->getContent()
+            json_encode(json_decode(utf8_encode($request->getContent())))
         );
         fclose($temp_file);
 
