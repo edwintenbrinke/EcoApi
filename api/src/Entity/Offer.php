@@ -61,16 +61,19 @@ class Offer
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"offers"})
      */
     private $store_name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"offers"})
      */
     private $currency_name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"offers"})
      */
     private $user_name;
 
