@@ -55,6 +55,12 @@ export default [
         component: () => import('@/views/dashboard/pages/Trades'),
       },
       {
+        name: 'discord',
+        path: '/discord',
+        meta: { authRequired: false },
+        component: () => import('@/views/dashboard/pages/Discord'),
+      },
+      {
         name: 'log',
         path: '/log/',
         component: () => import('@/views/dashboard/pages/logs/Index'),

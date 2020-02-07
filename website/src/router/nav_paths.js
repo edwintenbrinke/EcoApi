@@ -27,6 +27,11 @@ export default [
     to: '/trades',
   },
   {
+    icon: 'mdi-cart',
+    title: 'nav.trades',
+    to: '/discord',
+  },
+  {
     group: '/log',
     icon: 'mdi-clipboard-outline',
     title: 'nav.logs',

@@ -22,8 +22,11 @@ class PaginationHelper
         $limit = $options->itemsPerPage;
         $page = $options->page;
 
-        $qb->setFirstResult($limit * ($page - 1))
-            ->setMaxResults($limit);
+        if ($limit != -1)
+        {
+            $qb->setFirstResult($limit * ($page - 1))
+                ->setMaxResults($limit);
+        }
 
         // order by
         if (isset($options->sortBy) && count($options->sortBy) > 0)
