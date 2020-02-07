@@ -15,6 +15,7 @@
       //   },
       // })
       // eventSource.onmessage = e => console.log(e)// this.onMessage
+      this.getData()
       this.interval = setInterval(() => this.getData(), 61000);
     },
 
