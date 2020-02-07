@@ -51,6 +51,32 @@
       <!-- https://github.com/vuetifyjs/vuetify/pull/8574 -->
       <div />
     </v-list>
+
+    <v-divider class="mb-1" />
+
+    <v-list
+      expand
+      nav
+    >
+      <div />
+
+      <div class="ml-auto text-center">
+        <div
+          class="body-3 grey--text font-weight-light"
+        >
+        Online players: {{$store.state.server.online_players}}
+        </div>
+        <v-divider class="mb-1" />
+        <template v-for="user in $store.state.online_users">
+            <span class="white--text">
+              {{user.name}}
+            </span>
+          <v-divider class="mb-1" />
+        </template>
+      </div>
+
+      <div />
+    </v-list>
   </v-navigation-drawer>
 </template>
 

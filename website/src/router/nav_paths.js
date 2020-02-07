@@ -11,11 +11,11 @@ export default [
   //     },
   //   ],
   // },
-  // {
-  //   icon: 'mdi-view-dashboard',
-  //   title: 'nav.dashboard',
-  //   to: '/',
-  // },
+  {
+    icon: 'mdi-view-dashboard',
+    title: 'nav.dashboard',
+    to: '/',
+  },
   {
     icon: 'mdi-account-group',
     title: 'nav.users',
@@ -25,11 +25,6 @@ export default [
     icon: 'mdi-cart',
     title: 'nav.trades',
     to: '/trades',
-  },
-  {
-    icon: 'mdi-cart',
-    title: 'nav.trades',
-    to: '/discord',
   },
   {
     group: '/log',

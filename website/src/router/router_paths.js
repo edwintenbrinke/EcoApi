@@ -114,9 +114,16 @@ export default [
       // Dashboard
       {
         name: 'dashboard',
-        path: '',
+        path: 'test',
         meta: { authRequired: true },
         component: () => import('@/views/dashboard/Dashboard'),
+      },
+      // Dashboard
+      {
+        name: 'dashboard',
+        path: '',
+        meta: { authRequired: true },
+        component: () => import('@/views/dashboard/pages/Dashboard'),
       }
     ],
   },

@@ -16,6 +16,7 @@ export default new Vuex.Store({
     barImage: 'https://demos.creative-tim.com/material-dashboard-pro/assets/img/sidebar-1.jpg',
     drawer: null,
     server: null,
+    online_users: null,
   },
   mutations: {
     // TEMPLATE

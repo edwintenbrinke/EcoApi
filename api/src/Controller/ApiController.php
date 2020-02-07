@@ -97,11 +97,14 @@ class ApiController extends BaseController
      *
      * @return Response
      */
-    public function getServerData(ServerRepository $server_repository, SerializerInterface $serializer)
+    public function getServerData(ServerRepository $server_repository, UserRepository $user_repository,SerializerInterface $serializer)
     {
         return $this->jsonResponse(
             $serializer,
-            $server_repository->findOneBy(['name' => Server::SERVER_NAME]),
+            [
+                'server' => $server_repository->findOneBy(['name' => Server::SERVER_NAME]),
+                'users' => $user_repository->findBy(['online' => true]),
+            ],
             self::SERIALIZE_PUBLIC
         );
     }

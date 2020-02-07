@@ -8,7 +8,7 @@
 
     <dashboard-core-view />
 
-    <!--    <dashboard-mercure />-->
+    <dashboard-mercure />
   </v-app>
 </template>
 
@@ -28,10 +28,11 @@
     }),
 
     mounted() {
-      this.$http.get('/api/server')
-        .then(response => {
-          this.$store.state.server = response.data;
-        })
+      // this.$http.get('/api/server')
+      //   .then(response => {
+      //     this.$store.state.server = response.data.server;
+      //     this.$store.state.online_users = response.data.users;
+      //   })
     }
   }
 </script>
