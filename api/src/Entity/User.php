@@ -28,6 +28,11 @@ class User
     private $id;
 
     /**
+     * @ORM\Column(type="guid")
+     */
+    private $guid;
+
+    /**
      * @var int
      * @ORM\Column(type="integer")
      * @Groups({"public"})
@@ -77,12 +82,13 @@ class User
     private $online;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Store", mappedBy="user", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Offer", mappedBy="user")
      */
-    private $stores;
+    private $offers;
 
     public function __construct($external_id, $slg_id, $steam_id, $name, $total_play_time, $last_online_time, $online = false)
     {
+        $this->guid = uuid_create(UUID_TYPE_RANDOM);
         $this->external_id = $external_id;
         $this->slg_id = $slg_id;
         $this->steam_id = $steam_id;
@@ -90,7 +96,6 @@ class User
         $this->total_play_time = (int)$total_play_time;
         $this->last_online_time = (int)$last_online_time;
         $this->online = $online;
-        $this->stores = new ArrayCollection();
     }
 
     public static function createFromModData(array $data)
@@ -192,37 +197,6 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection|Store[]
-     */
-    public function getStores(): Collection
-    {
-        return $this->stores;
-    }
-
-    public function addStore(Store $store): self
-    {
-        if (!$this->stores->contains($store)) {
-            $this->stores[] = $store;
-            $store->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStore(Store $store): self
-    {
-        if ($this->stores->contains($store)) {
-            $this->stores->removeElement($store);
-            // set the owning side to null (unless already changed)
-            if ($store->getUser() === $this) {
-                $store->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getOnline(): bool
     {
         return $this->online;
@@ -231,6 +205,18 @@ class User
     public function setOnline(bool $online): self
     {
         $this->online = $online;
+
+        return $this;
+    }
+
+    public function getGuid(): ?string
+    {
+        return $this->guid;
+    }
+
+    public function setGuid(string $guid): self
+    {
+        $this->guid = $guid;
 
         return $this;
     }

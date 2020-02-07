@@ -58,9 +58,9 @@
         { text: 'Buying | Selling', value: 'buying', search: false },
         { text: 'Price', value: 'price', search: false },
         { text: 'Amount', value: 'max_num_wanted', search: false },
-        { text: 'Shop name', value: 'store.name', search: false },
-        { text: 'Username', value: 'store.user.name', search: true },
-        { text: 'Currency', value: 'store.currency_name', search: false }
+        { text: 'Shop name', value: 'store_name', search: false },
+        { text: 'Username', value: 'user_name', search: true },
+        { text: 'Currency', value: 'currency_name', search: false }
       ],
       data: [],
       options: {},

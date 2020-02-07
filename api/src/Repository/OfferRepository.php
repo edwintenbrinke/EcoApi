@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Offer;
-use App\Entity\Store;
 use App\Entity\User;
 use App\Helper\PaginationHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -22,11 +21,18 @@ class OfferRepository extends ServiceEntityRepository
         parent::__construct($registry, Offer::class);
     }
 
+    public function findAllForUser(User $user)
+    {
+        return $this->createQueryBuilder('q')
+            ->where('q.user = :user_id')
+            ->setParameter('user_id', $user->getId())
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findPaginatedForPortal($options)
     {
-        $query = $this->createQueryBuilder('q')
-            ->join(Store::class, 'store')
-            ->join(User::class, 'user');
+        $query = $this->createQueryBuilder('q');
 
         return PaginationHelper::portalPaginationQueryBuilder($query, $options);
     }
@@ -39,9 +45,7 @@ class OfferRepository extends ServiceEntityRepository
     public function countPaginatedAll($options)
     {
         $query = $this->createQueryBuilder('q')
-            ->select('COUNT(DISTINCT(q.id))')
-            ->join(Store::class, 'store')
-            ->join(User::class, 'user');
+            ->select('COUNT(DISTINCT(q.id))');
 
         return PaginationHelper::portalPaginationCountQueryBuilder($query, $options);
     }
