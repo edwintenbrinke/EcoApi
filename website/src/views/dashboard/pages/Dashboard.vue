@@ -61,8 +61,10 @@
 </template>
 
 <script>
+  import ItemIcon from "../components/custom/ItemIcon";
   export default {
     name: 'DashboardDashboard',
+    components: {ItemIcon},
     data () {
       return {}
     },

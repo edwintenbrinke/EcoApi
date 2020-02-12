@@ -1,0 +1,37 @@
+<template>
+  <v-img :src="icon_url" max-width="25" max-height="25"/>
+</template>
+
+<script>
+  export default {
+    name: 'ItemIcon',
+    props: {
+      value: {
+        type: Object,
+        required: true,
+      }
+    },
+    data() {
+      return {
+        icon_url: 'https://gamepedia.cursecdn.com/eco_gamepedia/5/51/NoImage.png'
+      }
+    },
+    mounted() {
+      if (this.value.icon) return;
+      this.$http.post(`/api/item/${this.value.id}/icon`, {item_name: this.item_name})
+        .then(response => {
+          this.icon_url = response.data.icon_url;
+        })
+    },
+    computed: {
+      item_name() {
+        //Asphalt Road
+        return this.value.name.split(' ').join('_')
+      },
+    },
+  }
+</script>
+
+<style scoped>
+
+</style>

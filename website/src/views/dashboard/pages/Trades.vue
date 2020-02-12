@@ -25,6 +25,10 @@
             :server-items-length="totalItems"
             :multi-sort="true"
           >
+            <template v-slot:item.icon="{ item }">
+              <item-icon :value="item.item"/>
+            </template>
+
             <template v-slot:item.buying="{ item }">
               {{ item.buying ? "Buying" : "Selling" }}
             </template>
@@ -48,12 +52,14 @@
 </template>
 
 <script>
+  import ItemIcon from "@/views/dashboard/components/custom/ItemIcon";
   import SearchTextField from '@/views/dashboard/components/custom/SearchTextField'
   export default {
-    components: { SearchTextField },
+    components: { SearchTextField, ItemIcon },
     data: () => ({
       search: '',
       headers: [
+        { text: '', value: 'icon', search: false},
         { text: 'Item name', value: 'name', search: true },
         { text: 'Buying | Selling', value: 'buying', search: false },
         { text: 'Price', value: 'price', search: false },
