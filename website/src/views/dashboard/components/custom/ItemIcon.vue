@@ -17,7 +17,11 @@
       }
     },
     mounted() {
-      if (this.value.icon) this.icon_url = this;
+      if (this.value.icon) {
+        this.icon_url = this.value.icon;
+        return;
+      }
+
       this.$http.post(`/api/item/${this.value.id}/icon`, {item_name: this.item_name})
         .then(response => {
           this.icon_url = response.data.icon_url;
@@ -25,7 +29,6 @@
     },
     computed: {
       item_name() {
-        //Asphalt Road
         return this.value.name.split(' ').join('_')
       },
     },
