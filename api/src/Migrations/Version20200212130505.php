@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200212115446 extends AbstractMigration
+final class Version20200212130505 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -23,6 +23,9 @@ final class Version20200212115446 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE item (id INT AUTO_INCREMENT NOT NULL, external_id VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, icon VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE offer ADD item_id INT NOT NULL');
+        $this->addSql('ALTER TABLE offer ADD CONSTRAINT FK_29D6873E126F525E FOREIGN KEY (item_id) REFERENCES item (id)');
+        $this->addSql('CREATE INDEX IDX_29D6873E126F525E ON offer (item_id)');
     }
 
     public function down(Schema $schema) : void
@@ -30,6 +33,9 @@ final class Version20200212115446 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->addSql('ALTER TABLE offer DROP FOREIGN KEY FK_29D6873E126F525E');
         $this->addSql('DROP TABLE item');
+        $this->addSql('DROP INDEX IDX_29D6873E126F525E ON offer');
+        $this->addSql('ALTER TABLE offer DROP item_id');
     }
 }

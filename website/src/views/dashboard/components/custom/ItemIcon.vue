@@ -17,7 +17,7 @@
       }
     },
     mounted() {
-      if (this.value.icon) return;
+      if (this.value.icon) this.icon_url = this;
       this.$http.post(`/api/item/${this.value.id}/icon`, {item_name: this.item_name})
         .then(response => {
           this.icon_url = response.data.icon_url;

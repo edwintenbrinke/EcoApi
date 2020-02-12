@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ItemRepository")
@@ -15,6 +16,7 @@ class Item
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"offers"})
      */
     private $id;
 
@@ -30,6 +32,7 @@ class Item
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"offers"})
      */
     private $icon;
 
@@ -48,6 +51,7 @@ class Item
 
     public static function createFromOfferData(array $data)
     {
+        // TODO item_id
         return new self(
             $data['item_id'],
             $data['name']

@@ -86,6 +86,7 @@ class Offer
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Item", inversedBy="offers")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"offers"})
      */
     private $item;
 
