@@ -4,9 +4,9 @@
 namespace App\Service;
 
 
+use App\Entity\Item;
 use App\Entity\Offer;
 use App\Entity\Server;
-use App\Entity\Store;
 use App\Entity\User;
 use App\Service\SearchTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,10 +16,12 @@ class ProcessModDataService
 {
     use SearchTrait;
     private $em;
+    private $items;
 
     public function __construct(EntityManagerInterface $entity_manager)
     {
         $this->em = $entity_manager;
+        $this->items = $entity_manager->getRepository(Item::class)->findAllForModData();
     }
 
     public function processServerData(array $data)
@@ -82,6 +84,8 @@ class ProcessModDataService
                     $user_offer = Offer::createFromModData($offer_data);
                     $user_offer->setUser($user);
                     $this->em->persist($user_offer);
+
+                    $this->handleItem($offer_data, $user_offer);
                 }
                 else
                 {
@@ -114,6 +118,21 @@ class ProcessModDataService
             {
                 $this->em->remove($data);
             }
+        }
+    }
+
+    private function handleItem(array $offer_data, Offer $offer)
+    {
+        if (array_key_exists($offer_data['name'], $this->items))
+        {
+            $offer->setItem($this->items[$offer_data['name']]);
+        }
+        else
+        {
+            $item = Item::createFromOfferData($offer_data);
+            $offer->setItem($item);
+            $this->em->persist($item);
+            $this->items[$item->getName()] = $item;
         }
     }
 }

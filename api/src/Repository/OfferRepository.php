@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Item;
 use App\Entity\Offer;
 use App\Entity\User;
 use App\Helper\PaginationHelper;
@@ -32,7 +33,8 @@ class OfferRepository extends ServiceEntityRepository
 
     public function findPaginatedForPortal($options)
     {
-        $query = $this->createQueryBuilder('q');
+        $query = $this->createQueryBuilder('q')
+            ->join(Item::class, 'item');
 
         return PaginationHelper::portalPaginationQueryBuilder($query, $options);
     }
@@ -45,7 +47,8 @@ class OfferRepository extends ServiceEntityRepository
     public function countPaginatedAll($options)
     {
         $query = $this->createQueryBuilder('q')
-            ->select('COUNT(DISTINCT(q.id))');
+            ->select('COUNT(DISTINCT(q.id))')
+            ->join(Item::class, 'item');
 
         return PaginationHelper::portalPaginationCountQueryBuilder($query, $options);
     }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\DatetimeInfoTrait;
+use App\Helper\DataHelper;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -66,7 +67,7 @@ class Place
     {
         return new self(
             $data['_id'],
-            $data['Username'],
+            DataHelper::getUsername($data),
             isset($data['AuthId']) ? $data['AuthId'] : null,
             $data['TimeSeconds'],
             $data['ItemTypeName']

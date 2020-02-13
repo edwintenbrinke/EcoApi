@@ -83,6 +83,13 @@ class Offer
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Item", inversedBy="offers")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"offers"})
+     */
+    private $item;
+
     public function __construct($price, $buying, $name, $max_num_wanted, $store_id, $store_name, $currency_name, $user_name)
     {
         $this->guid = uuid_create(UUID_TYPE_RANDOM);
@@ -244,6 +251,18 @@ class Offer
     public function setGuid(string $guid): self
     {
         $this->guid = $guid;
+
+        return $this;
+    }
+
+    public function getItem(): ?Item
+    {
+        return $this->item;
+    }
+
+    public function setItem(?Item $item): self
+    {
+        $this->item = $item;
 
         return $this;
     }
