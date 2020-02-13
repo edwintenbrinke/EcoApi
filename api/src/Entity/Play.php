@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\DatetimeInfoTrait;
+use App\Helper\DataHelper;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -65,7 +66,7 @@ class Play
     {
         return new self(
             $data['_id'],
-            $data['Username'],
+            DataHelper::getUsername($data),
             $data['TimeSeconds'],
             $data['Value']
         );

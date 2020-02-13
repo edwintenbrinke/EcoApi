@@ -123,16 +123,16 @@ class ProcessModDataService
 
     private function handleItem(array $offer_data, Offer $offer)
     {
-        if (array_key_exists($offer_data['item_id'], $this->items))
+        if (array_key_exists($offer_data['name'], $this->items))
         {
-            $offer->setItem($this->items[$offer_data['item_id']]);
+            $offer->setItem($this->items[$offer_data['name']]);
         }
         else
         {
             $item = Item::createFromOfferData($offer_data);
             $offer->setItem($item);
             $this->em->persist($item);
-            $this->items[$item->getExternalId()] = $item;
+            $this->items[$item->getName()] = $item;
         }
     }
 }

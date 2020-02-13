@@ -27,6 +27,7 @@ class Item
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"offers"})
      */
     private $name;
 
@@ -51,9 +52,8 @@ class Item
 
     public static function createFromOfferData(array $data)
     {
-        // TODO item_id
         return new self(
-            $data['item_id'],
+            $data['type_id'],
             $data['name']
         );
     }

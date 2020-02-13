@@ -1,5 +1,5 @@
 <template>
-  <v-img :src="icon_url" max-width="25" max-height="25"/>
+  <v-img :src="icon_url" max-width="25" max-height="25" @click="checkUpdate"/>
 </template>
 
 <script>
@@ -19,19 +19,21 @@
     mounted() {
       if (this.value.icon) {
         this.icon_url = this.value.icon;
-        return;
       }
-
-      this.$http.post(`/api/item/${this.value.id}/icon`, {item_name: this.item_name})
-        .then(response => {
-          this.icon_url = response.data.icon_url;
-        })
     },
     computed: {
       item_name() {
         return this.value.name.split(' ').join('_')
       },
     },
+    methods: {
+      checkUpdate() {
+        this.$http.post(`/api/item/${this.value.id}/icon`, {item_name: this.item_name})
+          .then(response => {
+            this.icon_url = response.data.icon_url;
+          })
+      }
+    }
   }
 </script>
 

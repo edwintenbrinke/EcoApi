@@ -23,7 +23,7 @@ class ItemRepository extends ServiceEntityRepository
         /** @var Item $item */
         foreach ($result as $item)
         {
-            $sorted_result[$item->getExternalId()] = $item;
+            $sorted_result[$item->getName()] = $item;
         }
         return $sorted_result;
     }
