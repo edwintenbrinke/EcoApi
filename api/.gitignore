@@ -7,7 +7,8 @@
 /public/bundles/
 /var/
 /vendor/
-/files/eco/
+/files/eco/*
+/files/mod/*
 /.idea/
 test.txt
 ###< symfony/framework-bundle ###
