@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -111,6 +112,12 @@ class EcoDataController extends AbstractController
                     }
                 );
             }
+        }
+
+        if (count($content) === 0)
+        {
+            $eco_api_logger->error('no content found?', ['content' => $request->getContent()]);
+            throw new HttpException('no data gotten?', 500);
         }
 
         $file_name = sprintf('eco-data-%s.json', (new \DateTime())->format('Y-m-d\TH:i:s'));
