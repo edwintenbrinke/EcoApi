@@ -137,8 +137,8 @@ class ProcessEcoDataCommand extends Command
 
                 // if sale or buy is the last in the data array, finish the last sale/buy
                 $this->entity_service->finishStackedData();
-            }
 
+            }
             unlink($file_path);
         }
 

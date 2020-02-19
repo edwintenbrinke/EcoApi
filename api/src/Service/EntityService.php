@@ -11,6 +11,7 @@ use App\Entity\Pickup;
 use App\Entity\Place;
 use App\Entity\Play;
 use App\Entity\Sell;
+use App\Helper\DataHelper;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -102,7 +103,7 @@ class EntityService
             if (
                 $this->stack_class === $entity_class
                 && $data['ItemTypeName'] === $this->stack_data[0]['ItemTypeName']
-                && $data['Username'] === $this->stack_data[0]['Username']
+                && DataHelper::getUsername($data) === DataHelper::getUsername($this->stack_data[0])
                 && $data['AuthId'] === $this->stack_data[0]['AuthId']
                 && $data['WorldObjectId'] === $this->stack_data[0]['WorldObjectId']
             )
