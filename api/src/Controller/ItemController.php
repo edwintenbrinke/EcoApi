@@ -47,12 +47,11 @@ class ItemController extends BaseController
         $regex = ";https://gamepedia\.cursecdn\.com/eco_gamepedia(/[a-z0-9]{1,2}/[a-z0-9]{1,2}/)".$icon_name."_Icon\.png\?;";
         preg_match($regex, $response, $matches);
 
-        if (!isset($matches[1]))
+        $icon_url = null;
+        if (isset($matches[1]))
         {
-            return new JsonResponse(['icon_url' => null]);
+            $icon_url = "https://gamepedia.cursecdn.com/eco_gamepedia/thumb" . $matches[1] . $icon_name."_Icon.png/50px-".$icon_name."_Icon.png";
         }
-
-        $icon_url = "https://gamepedia.cursecdn.com/eco_gamepedia/thumb" . $matches[1] . $icon_name."_Icon.png/50px-".$icon_name."_Icon.png";
 
         $cache->save('item.'.$name, $icon_url);
 
